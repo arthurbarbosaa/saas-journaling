@@ -8,7 +8,12 @@ export default {
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}", 
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        closeRed: '#c9124c',
+        closeRedHover: '#f31260',
+      },
+    },
   },
   darkMode: "class",
   plugins: [
