@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Journal
 
 class JournalListCreate(generics.ListCreateAPIView):
-    serilizer_class = JournalSerializer
+    serializer_class = JournalSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
@@ -26,7 +26,6 @@ class JournalDelete(generics.DestroyAPIView):
     def get_queryset(self):
         user = self.request.user
         return Journal.objects.filter(author=user)
-    
 
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
