@@ -50,13 +50,13 @@ function Home() {
     };
 
     return (
-        <div>
+        <div className="">
             <NavbarComponent>
 
             </NavbarComponent>
 
 
-            <div className="flex justify-center">
+            <div className="m-6">
                 {journals.map(journal => (
                     <Journal key={journal.id} journal={journal} deleteJournal={deleteJournal} />
                 ))}
