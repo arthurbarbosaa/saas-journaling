@@ -1,15 +1,22 @@
 import React from "react";
-import { Tooltip, Checkbox } from "@nextui-org/react";
+import { Tooltip, Checkbox, DateInput } from "@nextui-org/react";
 import { EditIcon } from "../assets/EditIcon";
 import { DeleteIcon } from "../assets/DeleteIcon";
 
+import { parseDate } from "@internationalized/date";
+
 const Journal = ({ journal, deleteJournal }) => {
+
     return (
         <div className="flex justify-center items-center mb-8">
             <div className="card w-full max-w-4xl bg-base-100 shadow-xl">
                 <div className="card-body p-4">
                     <div>
                         <h3 className="text-xl font-bold ">{journal.highlight}</h3>
+
+                        <p className="text-sm text-gray-500">Created at: {journal.created_at}</p>
+                        
+                        
                         <div className="flex flex-row text-lg">
                             <div className="mr-2">Gym:</div>
                                 <Checkbox className="mr-2"
