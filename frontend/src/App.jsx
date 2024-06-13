@@ -5,6 +5,7 @@ import Login from "./pages/Login"
 import Register from "./pages/Register"
 import Home from "./pages/Home"
 import NotFound from "./pages/NotFound"
+import Month from "./pages/Month"
 import ProtectedRoute from "./components/ProtectedRoute"
 
 
@@ -27,6 +28,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Home /> 
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/month"
+          element={
+            <ProtectedRoute>
+              <Month /> 
             </ProtectedRoute>
           }
         />

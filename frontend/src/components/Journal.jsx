@@ -12,9 +12,9 @@ const Journal = ({ journal, deleteJournal }) => {
             <div className="card w-full max-w-4xl bg-base-100 shadow-xl">
                 <div className="card-body p-4">
                     <div>
+                        
                         <h3 className="text-xl font-bold ">{journal.highlight}</h3>
 
-                        <p className="text-sm text-gray-500">Created at: {journal.created_at}</p>
                         
                         
                         <div className="flex flex-row text-lg">
