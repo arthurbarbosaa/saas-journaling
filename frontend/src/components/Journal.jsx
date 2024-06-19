@@ -15,8 +15,6 @@ const Journal = ({ journal, deleteJournal }) => {
                         
                         <h3 className="text-xl font-bold ">{journal.highlight}</h3>
 
-                        
-                        
                         <div className="flex flex-row text-lg">
                             <div className="mr-2">Gym:</div>
                                 <Checkbox className="mr-2"

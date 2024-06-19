@@ -42,11 +42,9 @@ const NavbarComponent = () => {
             </NavbarContent>
             <NavbarContent justify="end">
                 <NavbarItem>
-                    <Link href="/logout">
-                        <Button color="danger">
+                    <Button as={Link} color="danger" href="/logout">
                         Logout
-                        </Button>
-                    </Link>
+                    </Button>
                 </NavbarItem>
             </NavbarContent>
         </Navbar>
