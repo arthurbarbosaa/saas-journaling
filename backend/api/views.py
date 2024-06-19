@@ -11,6 +11,9 @@ class JournalListCreate(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
+        month_id = self.request.query_params.get('month')
+        if month_id:
+            return Journal.objects.filter(author=user, month__id=month_id)
         return Journal.objects.filter(author=user)
     
     def perform_create(self, serializer):
@@ -41,6 +44,11 @@ class MonthListCreate(generics.ListCreateAPIView):
             serializer.save(author=self.request.user)
         else:
             print(serializer.errors)
+
+class MonthDetail(generics.RetrieveAPIView):
+    queryset = Month.objects.all()
+    serializer_class = MonthSerializer
+    permission_classes = [IsAuthenticated]
 
 class MonthDelete(generics.DestroyAPIView):
     serializer_class = MonthSerializer

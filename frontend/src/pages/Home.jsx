@@ -2,42 +2,45 @@ import React, { useState, useEffect } from "react";
 import api from "../api";
 import Journal from "../components/Journal";
 import NavbarComponent from "../components/NavbarComponent";
-import { Checkbox, Input, Button, Select, SelectItem } from "@nextui-org/react";
+import { Checkbox, Input, Button } from "@nextui-org/react";
+import { useParams } from "react-router-dom";
 
 function Home() {
     const [journals, setJournals] = useState([]);
-    const [months, setMonths] = useState([]);
-    const [monthId, setMonthId] = useState('');
+    const [selectedMonthId, setSelectedMonthId] = useState(null);
+    const [selectedMonthName, setSelectedMonthName] = useState("");
     const [highlight, setHighlight] = useState("");
     const [isGymDone, setIsGymDone] = useState(false);
     const [isReadDone, setIsReadDone] = useState(false);
     const [weight, setWeight] = useState("");
-    
     const [showForm, setShowForm] = useState(false);
+    const { monthId } = useParams(); // Assume que monthId é passado como parâmetro de URL
 
     useEffect(() => {
-        getJournals();
-        getMonths();
-    }, []);
+        if (monthId) {
+            setSelectedMonthId(monthId);
+            getJournals(monthId);
+            getMonth(monthId);
+        }
+    }, [monthId]);
 
-    const getMonths = () => {
+    const getJournals = (monthId) => {
         api
-            .get("/api/months/")
+            .get(`/api/journals/?month=${monthId}`)
             .then((res) => res.data)
             .then((data) => {
-                setMonths(data);
+                setJournals(data);
                 console.log(data);
             })
             .catch((err) => alert(err));
     };
 
-    const getJournals = () => {
+    const getMonth = (monthId) => {
         api
-            .get("/api/journals/")
+            .get(`/api/months/${monthId}/`)
             .then((res) => res.data)
             .then((data) => {
-                setJournals(data);
-                console.log(data);
+                setSelectedMonthName(data.name);
             })
             .catch((err) => alert(err));
     };
@@ -48,27 +51,33 @@ function Home() {
             .then((res) => {
                 if (res.status === 204) alert("Journal deleted!");
                 else alert("Failed to delete Journal.");
-                getJournals();
+                getJournals(selectedMonthId);
             })
             .catch((error) => alert(error));
     };
 
     const createJournal = (e) => {
         e.preventDefault();
+        if (!selectedMonthId) {
+            alert("Month not selected!");
+            return;
+        }
+
         api
-            .post("/api/journals/", { highlight, is_gym_done: isGymDone, is_read_done: isReadDone, weight, month_id: monthId })
+            .post("/api/journals/", { highlight, is_gym_done: isGymDone, is_read_done: isReadDone, weight, month_id: selectedMonthId })
             .then((res) => {
                 if (res.status === 201) alert("Journal created!");
                 else alert("Failed to make Journal.");
-                getJournals();
+                getJournals(selectedMonthId);
                 setShowForm(false);
             })
-            .catch((err) => alert(err), console.log(err));
+            .catch((err) => alert(err));
     };
 
     return (
         <div className="">
             <NavbarComponent />
+            <div>{selectedMonthName && <h1 className="text-center mt-4 mb-2 text-2xl font-bold">{selectedMonthName}</h1>}</div>
             <div className="m-6">
                 {journals.map(journal => (
                     <Journal key={journal.id} journal={journal} deleteJournal={deleteJournal} />
@@ -139,23 +148,6 @@ function Home() {
                                     >
                                         Is Read Done
                                     </Checkbox>
-                                </div>
-                                <div>
-                                    <label htmlFor="month">Month:</label>
-                                    <Select
-                                        label="Select a Month"
-                                        placeholder=""
-                                        value={monthId}
-                                        onChange={(value) => setMonthId(value)}
-                                        className="max-w-xs"
-                                        required
-                                    >
-                                        {months.map(month => (
-                                            <SelectItem key={month.id} value={month.id}>
-                                                {month.name}
-                                            </SelectItem>
-                                        ))}
-                                    </Select>
                                 </div>
                                 <div className="col-span-1 sm:col-span-2 flex justify-center mt-4">
                                     <Button color="primary" type="submit">

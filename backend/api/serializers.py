@@ -22,8 +22,9 @@ class MonthSerializer(serializers.ModelSerializer):
         extra_kwargs = {"author": {"read_only": True}}
 
 class JournalSerializer(serializers.ModelSerializer):
-    month = MonthSerializer()
+    month_id = serializers.PrimaryKeyRelatedField(queryset=Month.objects.all(), source='month')
+
     class Meta:
         model = Journal
-        fields = ["id", "created_at", "highlight", "is_gym_done", "is_read_done", "weight", "author", "month"]
+        fields = ["id", "created_at", "highlight", "is_gym_done", "is_read_done", "weight", "author", "month", "month_id"]
         extra_kwargs = {"author": {"read_only": True}, "month": {"read_only": True}}
