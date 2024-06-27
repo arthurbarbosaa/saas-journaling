@@ -5,13 +5,14 @@ import { DeleteIcon } from "../assets/DeleteIcon";
 
 import { parseDate } from "@internationalized/date";
 
-const Journal = ({ journal, deleteJournal }) => {
+const JournalComponent = ({ journal, deleteJournal }) => {
 
     return (
         <div className="flex justify-center items-center mb-8">
             <div className="card w-full max-w-4xl bg-base-100 shadow-xl">
                 <div className="card-body p-4">
                     <div>
+                        <p>{journal.created_at}</p>
                         
                         <h3 className="text-xl font-bold ">{journal.highlight}</h3>
 
@@ -53,4 +54,4 @@ const Journal = ({ journal, deleteJournal }) => {
     );
 };
 
-export default Journal;
+export default JournalComponent;

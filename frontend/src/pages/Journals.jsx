@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import api from "../api";
-import Journal from "../components/Journal";
+import JournalComponent from "../components/JournalComponent";
 import NavbarComponent from "../components/NavbarComponent";
 import { Checkbox, Input, Button } from "@nextui-org/react";
 import { useParams } from "react-router-dom";
 
-function Home() {
+function Journals() {
     const [journals, setJournals] = useState([]);
     const [selectedMonthId, setSelectedMonthId] = useState(null);
     const [selectedMonthName, setSelectedMonthName] = useState("");
@@ -80,7 +80,7 @@ function Home() {
             <div>{selectedMonthName && <h1 className="text-center mt-4 mb-2 text-2xl font-bold">{selectedMonthName}</h1>}</div>
             <div className="m-6">
                 {journals.map(journal => (
-                    <Journal key={journal.id} journal={journal} deleteJournal={deleteJournal} />
+                    <JournalComponent key={journal.id} journal={journal} deleteJournal={deleteJournal} />
                 ))}
             </div>
             <div className="flex justify-center mt-4 mb-6">
@@ -163,4 +163,4 @@ function Home() {
     );
 }
 
-export default Home;
+export default Journals;

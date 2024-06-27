@@ -4,7 +4,7 @@ import NavbarComponent from "../components/NavbarComponent";
 import { Input, Button, Select, SelectItem } from "@nextui-org/react";
 import MonthComponent from "../components/MonthComponent"
 
-function Month() {
+function Months() {
     const [months, setMonths] = useState([]);
     const [name, setName] = useState("");
     const [showForm, setShowForm] = useState(false);
@@ -105,4 +105,4 @@ function Month() {
     );
 }
 
-export default Month;
+export default Months;

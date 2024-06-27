@@ -24,14 +24,14 @@ const NavbarComponent = () => {
                 <p className="font-bold text-inherit">Journaling</p>
             </NavbarBrand>
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
-                <NavbarItem isActive>
-                    <Link color="primary" href="/">
+                <NavbarItem >
+                    <Link color="foreground" href="/">
                         Jounals
                     </Link>
                 </NavbarItem>
-                <NavbarItem >
-                    <Link color="foreground" href="/month">
-                        Month
+                <NavbarItem isActive>
+                    <Link color="primary" href="/months">
+                        Months
                     </Link>
                 </NavbarItem>
                 <NavbarItem>

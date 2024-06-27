@@ -3,9 +3,9 @@ import './App.css';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Home from "./pages/Home";
+import Journals from "./pages/Journals";
 import NotFound from "./pages/NotFound";
-import Month from "./pages/Month";
+import Months from "./pages/Months";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function Logout() {
@@ -26,15 +26,15 @@ function App() {
           path="/"
           element={
             <ProtectedRoute>
-              <Home />
+              <Journals />
             </ProtectedRoute>
           }
         />
         <Route
-          path="/month"
+          path="/months"
           element={
             <ProtectedRoute>
-              <Month />
+              <Months />
             </ProtectedRoute>
           }
         />
@@ -42,7 +42,7 @@ function App() {
           path="/months/:monthId/journals"
           element={
             <ProtectedRoute>
-              <Home />
+              <Journals />
             </ProtectedRoute>
           }
         />
