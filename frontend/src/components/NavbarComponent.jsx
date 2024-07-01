@@ -25,7 +25,7 @@ const NavbarComponent = () => {
             </NavbarBrand>
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
                 <NavbarItem >
-                    <Link color="foreground" href="/">
+                    <Link color="foreground" href="#">
                         Jounals
                     </Link>
                 </NavbarItem>

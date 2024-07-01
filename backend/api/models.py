@@ -20,3 +20,13 @@ class Journal(models.Model):
 
     def __str__(self):
         return self.highlight
+
+
+class Goal(models.Model):
+    name = models.CharField(max_length=255)
+    is_completed = models.BooleanField(default=False)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="goals")
+    month = models.ForeignKey(Month, on_delete=models.CASCADE, related_name="goals")
+
+    def __str__(self):
+        return self.name
