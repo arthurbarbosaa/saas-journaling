@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics
-from .serializers import UserSerializer, JournalSerializer, MonthSerializer, GoalSerializer
+from .serializers import DailyHabitSerializer, HabitSerializer, UserSerializer, JournalSerializer, MonthSerializer, GoalSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Journal, Month, Goal
+from .models import DailyHabit, Habit, Journal, Month, Goal
 
 class JournalListCreate(generics.ListCreateAPIView):
     serializer_class = JournalSerializer
@@ -92,3 +92,64 @@ class GoalDelete(generics.DestroyAPIView):
 class GoalDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Goal.objects.all()
     serializer_class = GoalSerializer
+
+
+class HabitListCreate(generics.ListCreateAPIView):
+    serializer_class = HabitSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        month_id = self.request.query_params.get('month')
+        if month_id:
+            return Habit.objects.filter(author=user, month__id=month_id)
+        return Habit.objects.filter(author=user)
+
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save(author=self.request.user)
+        else:
+            print(serializer.errors)
+
+class HabitDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Habit.objects.all()
+    serializer_class = HabitSerializer
+    permission_classes = [IsAuthenticated]
+
+class HabitDelete(generics.DestroyAPIView):
+    serializer_class = HabitSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Habit.objects.filter(author=user)
+
+class DailyHabitListCreate(generics.ListCreateAPIView):
+    serializer_class = DailyHabitSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        habit_id = self.request.query_params.get('habit')
+        if habit_id:
+            return DailyHabit.objects.filter(habit__author=user, habit__id=habit_id)
+        return DailyHabit.objects.filter(habit__author=user)
+
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save()
+        else:
+            print(serializer.errors)
+
+class DailyHabitDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = DailyHabit.objects.all()
+    serializer_class = DailyHabitSerializer
+    permission_classes = [IsAuthenticated]
+
+class DailyHabitDelete(generics.DestroyAPIView):
+    serializer_class = DailyHabitSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return DailyHabit.objects.filter(habit__author=user)

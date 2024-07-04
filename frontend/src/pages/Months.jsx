@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import api from "../api";
 import NavbarComponent from "../components/NavbarComponent";
-import { Input, Button, Select, SelectItem } from "@nextui-org/react";
-import MonthComponent from "../components/MonthComponent"
+import { Input, Button } from "@nextui-org/react";
+import MonthComponent from "../components/MonthComponent";
 
 function Months() {
     const [months, setMonths] = useState([]);
     const [name, setName] = useState("");
+    const [habits, setHabits] = useState([{ name: "" }]);
     const [showForm, setShowForm] = useState(false);
 
     useEffect(() => {
@@ -19,7 +20,6 @@ function Months() {
             .then((res) => res.data)
             .then((data) => {
                 setMonths(data);
-                console.log(data);
             })
             .catch((err) => alert(err));
     };
@@ -40,12 +40,47 @@ function Months() {
         api
             .post("/api/months/", { name })
             .then((res) => {
-                if (res.status === 201) alert("Month created!");
-                else alert("Failed to create month.");
+                if (res.status === 201) {
+                    const monthId = res.data.id;
+                    createHabits(monthId);
+                    alert("Month created!");
+                } else {
+                    alert("Failed to create month.");
+                }
                 getMonths();
                 setShowForm(false);
             })
-            .catch((err) => alert(err), console.log(err));
+            .catch((err) => alert(err));
+    };
+
+    const createHabits = (monthId) => {
+        habits.forEach(habit => {
+            api
+                .post("/api/habits/", { name: habit.name, month_id: monthId })
+                .then((res) => {
+                    if (res.status === 201) {
+                        alert(`Habit ${habit.name} created!`);
+                    } else {
+                        alert(`Failed to create ${habit.name}.`);
+                    }
+                })
+                .catch((err) => alert(err));
+        });
+    };
+
+    const handleHabitChange = (index, event) => {
+        const newHabits = [...habits];
+        newHabits[index].name = event.target.value;
+        setHabits(newHabits);
+    };
+
+    const addHabitField = () => {
+        setHabits([...habits, { name: "" }]);
+    };
+
+    const removeHabitField = (index) => {
+        const newHabits = habits.filter((habit, i) => i !== index);
+        setHabits(newHabits);
     };
 
     return (
@@ -90,6 +125,31 @@ function Months() {
                                         onChange={(e) => setName(e.target.value)}
                                         required
                                     />
+                                </div>
+                                <div className="col-span-2">
+                                    <label htmlFor="habits">Habits:</label>
+                                    {habits.map((habit, index) => (
+                                        <div key={index} className="flex items-center mb-2">
+                                            <Input
+                                                clearable
+                                                bordered
+                                                fullWidth
+                                                color="primary"
+                                                size="lg"
+                                                value={habit.name}
+                                                onChange={(e) => handleHabitChange(index, e)}
+                                                required
+                                            />
+                                            {index > 0 && (
+                                                <Button color="danger" onClick={() => removeHabitField(index)}>
+                                                    -
+                                                </Button>
+                                            )}
+                                        </div>
+                                    ))}
+                                    <Button onClick={addHabitField} className="bg-secondary text-white mt-2">
+                                        Add Habit
+                                    </Button>
                                 </div>
                                 <div className="col-span-2 flex justify-center mt-4">
                                     <Button color="primary" type="submit">

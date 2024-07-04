@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 function Journals() {
     const [journals, setJournals] = useState([]);
     const [goals, setGoals] = useState([]);
+    const [habits, setHabits] = useState([])
     const [selectedMonthId, setSelectedMonthId] = useState(null);
     const [selectedMonthName, setSelectedMonthName] = useState("");
     const [highlight, setHighlight] = useState("");
@@ -26,6 +27,7 @@ function Journals() {
             getJournals(monthId);
             getGoals(monthId);
             getMonth(monthId);
+            getHabits(monthId);
         }
     }, [monthId]);
 
@@ -45,6 +47,17 @@ function Journals() {
             .then((res) => res.data)
             .then((data) => {
                 setGoals(data);
+            })
+            .catch((err) => alert(err));
+    };
+
+    const getHabits = (monthId) => {
+        api
+            .get(`/api/habits/?month=${monthId}`)
+            .then((res) => res.data)
+            .then((data) => {
+                console.log(data)
+                setHabits(data);
             })
             .catch((err) => alert(err));
     };
@@ -81,6 +94,16 @@ function Journals() {
             .catch((error) => alert(error));
     };
 
+    const createDailyHabits = async (journalId, habits) => {
+        try {
+            for (const habit of habits) {
+                await api.post("/api/dailyhabits/", { journal_id: journalId, habit_id: habit.id });
+            }
+        } catch (error) {
+            console.error('Error creating daily habits:', error);
+        }
+    };
+
     const createJournal = (e) => {
         e.preventDefault();
         if (!selectedMonthId) {
@@ -90,8 +113,12 @@ function Journals() {
 
         api
             .post("/api/journals/", { highlight, is_gym_done: isGymDone, is_read_done: isReadDone, weight, month_id: selectedMonthId })
-            .then((res) => {
-                if (res.status === 201) alert("Journal created!");
+            .then(async (res) => {
+                if (res.status === 201) {
+                    alert("Journal created!");
+                    const journalId = res.data.id;
+                    await createDailyHabits(journalId, habits);
+                } 
                 else alert("Failed to make Journal.");
                 getJournals(selectedMonthId);
                 setShowForm(false);
@@ -135,7 +162,7 @@ function Journals() {
             <div>{selectedMonthName && <h1 className="text-center mt-4 mb-2 text-2xl font-bold">{selectedMonthName}</h1>}</div>
                 <div className="m-6">
                 {journals.map(journal => (
-                    <JournalComponent key={journal.id} journal={journal} deleteJournal={deleteJournal} />
+                    <JournalComponent key={journal.id} journal={journal} deleteJournal={deleteJournal} habits={habits} />
                 ))}
                 <div className="mt-6">
                     <h2 className="text-xl font-bold mb-4">Goals</h2>

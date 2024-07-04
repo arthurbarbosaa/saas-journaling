@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Journal, Month, Goal
+from .models import Journal, Month, Goal, Habit, DailyHabit
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -36,3 +36,21 @@ class GoalSerializer(serializers.ModelSerializer):
         model = Goal
         fields = ["id", "name", "is_completed", "author", "month", "month_id"]
         extra_kwargs = {"author": {"read_only": True}, "month": {"read_only": True}}
+
+
+class HabitSerializer(serializers.ModelSerializer):
+    month_id = serializers.PrimaryKeyRelatedField(queryset=Month.objects.all(), source='month')
+
+    class Meta:
+        model = Habit
+        fields = ["id", "name", "author", "month", "month_id"]
+        extra_kwargs = {"author": {"read_only": True}, "month": {"read_only": True}}
+
+class DailyHabitSerializer(serializers.ModelSerializer):
+    habit_id = serializers.PrimaryKeyRelatedField(queryset=Habit.objects.all(), source='habit')
+    journal_id = serializers.PrimaryKeyRelatedField(queryset=Journal.objects.all(), source='journal')
+
+    class Meta:
+        model = DailyHabit
+        fields = ["id", "is_practiced", "habit", "habit_id", "journal", "journal_id"]
+        extra_kwargs = {"habit": {"read_only": True}, "journal": {"read_only": True}}
