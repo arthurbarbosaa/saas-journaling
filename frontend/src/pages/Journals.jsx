@@ -56,7 +56,6 @@ function Journals() {
             .get(`/api/habits/?month=${monthId}`)
             .then((res) => res.data)
             .then((data) => {
-                console.log(data)
                 setHabits(data);
             })
             .catch((err) => alert(err));
@@ -97,7 +96,7 @@ function Journals() {
     const createDailyHabits = async (journalId, habits) => {
         try {
             for (const habit of habits) {
-                await api.post("/api/dailyhabits/", { journal_id: journalId, habit_id: habit.id });
+                await api.post("/api/dailyhabits/", { journal_id: journalId, habit_id: habit.id, is_practiced: true});
             }
         } catch (error) {
             console.error('Error creating daily habits:', error);
@@ -162,7 +161,7 @@ function Journals() {
             <div>{selectedMonthName && <h1 className="text-center mt-4 mb-2 text-2xl font-bold">{selectedMonthName}</h1>}</div>
                 <div className="m-6">
                 {journals.map(journal => (
-                    <JournalComponent key={journal.id} journal={journal} deleteJournal={deleteJournal} habits={habits} />
+                    <JournalComponent key={journal.id} journal={journal} deleteJournal={deleteJournal} />
                 ))}
                 <div className="mt-6">
                     <h2 className="text-xl font-bold mb-4">Goals</h2>

@@ -1,16 +1,14 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import api from "../api";
-import { Tooltip, Checkbox, DateInput } from "@nextui-org/react";
+import { Tooltip, Checkbox } from "@nextui-org/react";
 import { EditIcon } from "../assets/EditIcon";
 import { DeleteIcon } from "../assets/DeleteIcon";
 
-import { parseDate } from "@internationalized/date";
-
-const JournalComponent = ({ journal, deleteJournal, habits }) => {
+const JournalComponent = ({ journal, deleteJournal }) => {
     const [dailyHabits, setDailyHabits] = useState([]);
 
     useEffect(() => {
-        getDailyHabits(journal.id)
+        getDailyHabits(journal.id);
     }, [journal]);
 
     const getDailyHabits = (journalId) => {
@@ -18,8 +16,7 @@ const JournalComponent = ({ journal, deleteJournal, habits }) => {
             .get(`/api/dailyhabits/?journal=${journalId}`)
             .then((res) => res.data)
             .then((data) => {
-                console.log(data)
-                setDailyHabits(data)
+                setDailyHabits(data.filter(dailyHabit => dailyHabit.journal === journalId));
             })
             .catch((err) => alert(err));
     };
@@ -34,23 +31,17 @@ const JournalComponent = ({ journal, deleteJournal, habits }) => {
                         <h3 className="text-xl font-bold ">{journal.highlight}</h3>
 
                         <div className="flex flex-row text-lg">
-                            {habits.map(habit => (
-                                <div key={habit.id} className="mr-2">
-                                    <span>{habit.name}: </span>
-                                </div>
-                            ))}
                             {dailyHabits.map(dailyHabit => (
                                 <div key={dailyHabit.id} className="mr-2">
-                                <span>{dailyHabit.habit.name}: </span>
-                                <Checkbox
-                                    isSelected={dailyHabit.is_practiced}
-                                />
-                            </div>
+                                    <span>{dailyHabit.habit.name}: </span>
+                                    <Checkbox
+                                        isSelected={dailyHabit.is_practiced}
+                                    >
+                                    </Checkbox>
+                                </div>
                             ))}
                             
-                                
                             <p>Weight: {journal.weight}</p>
-
 
                             <div className="flex flex-col space-y-2 sm:flex-row sm:space-x-2 sm:space-y-0">
                                 <Tooltip color="primary" content="Edit">

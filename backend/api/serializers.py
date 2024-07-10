@@ -47,6 +47,7 @@ class HabitSerializer(serializers.ModelSerializer):
         extra_kwargs = {"author": {"read_only": True}, "month": {"read_only": True}}
 
 class DailyHabitSerializer(serializers.ModelSerializer):
+    habit = HabitSerializer(read_only=True)
     habit_id = serializers.PrimaryKeyRelatedField(queryset=Habit.objects.all(), source='habit')
     journal_id = serializers.PrimaryKeyRelatedField(queryset=Journal.objects.all(), source='journal')
 
