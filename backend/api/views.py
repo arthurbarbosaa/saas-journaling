@@ -30,6 +30,9 @@ class JournalDelete(generics.DestroyAPIView):
         user = self.request.user
         return Journal.objects.filter(author=user)
     
+class JournalDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Journal.objects.all()
+    serializer_class = JournalSerializer    
 
 class MonthListCreate(generics.ListCreateAPIView):
     serializer_class = MonthSerializer

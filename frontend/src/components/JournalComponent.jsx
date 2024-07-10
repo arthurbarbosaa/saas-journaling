@@ -21,6 +21,19 @@ const JournalComponent = ({ journal, deleteJournal }) => {
             .catch((err) => alert(err));
     };
 
+    const updateDailyHabitPractition = (dailyHabitId, isPracticed) => {
+        api
+            .patch(`/api/dailyhabits/${dailyHabitId}/`, { is_practiced: isPracticed })
+            .then((res) => {
+                if (res.status === 200) alert("Habit updated!");
+                else alert("Failed to update Habit.");
+                getDailyHabits(journal.id);
+            })
+            .catch((err) => alert(err));
+    };
+
+    
+
     return (
         <div className="flex justify-center items-center mb-8">
             <div className="card w-full max-w-4xl bg-base-100 shadow-xl">
@@ -35,7 +48,7 @@ const JournalComponent = ({ journal, deleteJournal }) => {
                                 <div key={dailyHabit.id} className="mr-2">
                                     <span>{dailyHabit.habit.name}: </span>
                                     <Checkbox
-                                        isSelected={dailyHabit.is_practiced}
+                                        isSelected={dailyHabit.is_practiced} onChange={() => updateDailyHabitPractition(dailyHabit.id, !dailyHabit.is_practiced)}
                                     >
                                     </Checkbox>
                                 </div>

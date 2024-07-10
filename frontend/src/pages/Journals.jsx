@@ -13,8 +13,6 @@ function Journals() {
     const [selectedMonthId, setSelectedMonthId] = useState(null);
     const [selectedMonthName, setSelectedMonthName] = useState("");
     const [highlight, setHighlight] = useState("");
-    const [isGymDone, setIsGymDone] = useState(false);
-    const [isReadDone, setIsReadDone] = useState(false);
     const [weight, setWeight] = useState("");
     const [goalName, setGoalName] = useState("");
     const [showForm, setShowForm] = useState(false);
@@ -96,7 +94,7 @@ function Journals() {
     const createDailyHabits = async (journalId, habits) => {
         try {
             for (const habit of habits) {
-                await api.post("/api/dailyhabits/", { journal_id: journalId, habit_id: habit.id, is_practiced: true});
+                await api.post("/api/dailyhabits/", { journal_id: journalId, habit_id: habit.id,});
             }
         } catch (error) {
             console.error('Error creating daily habits:', error);
@@ -111,7 +109,7 @@ function Journals() {
         }
 
         api
-            .post("/api/journals/", { highlight, is_gym_done: isGymDone, is_read_done: isReadDone, weight, month_id: selectedMonthId })
+            .post("/api/journals/", { highlight, weight, month_id: selectedMonthId })
             .then(async (res) => {
                 if (res.status === 201) {
                     alert("Journal created!");
@@ -149,7 +147,7 @@ function Journals() {
             .then((res) => {
                 if (res.status === 200) alert("Goal updated!");
                 else alert("Failed to update Goal.");
-                getGoals(selectedMonthId);  // Atualize a lista de metas após a alteração
+                getGoals(selectedMonthId);
             })
             .catch((err) => alert(err));
     };
@@ -217,24 +215,6 @@ function Journals() {
                                         value={weight}
                                         onChange={(e) => setWeight(e.target.value)}
                                     />
-                                </div>
-                                <div>
-                                    <label htmlFor="is_gym_done">Gym Done:</label>
-                                    <Checkbox
-                                        checked={isGymDone}
-                                        onChange={(e) => setIsGymDone(e.target.checked)}
-                                    >
-                                        Is Gym Done
-                                    </Checkbox>
-                                </div>
-                                <div>
-                                    <label htmlFor="is_read_done">Read Done: </label>
-                                    <Checkbox
-                                        checked={isReadDone}
-                                        onChange={(e) => setIsReadDone(e.target.checked)}
-                                    >
-                                        Is Read Done
-                                    </Checkbox>
                                 </div>
                                 <div className="col-span-1 sm:col-span-2 flex justify-center mt-4">
                                     <Button color="primary" type="submit">
