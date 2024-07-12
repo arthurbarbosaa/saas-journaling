@@ -6,10 +6,24 @@ import { DeleteIcon } from "../assets/DeleteIcon";
 
 const JournalComponent = ({ journal, deleteJournal }) => {
     const [dailyHabits, setDailyHabits] = useState([]);
+    const [dailyMeasure, setDailyMeasure] = useState([]);
+
 
     useEffect(() => {
         getDailyHabits(journal.id);
+        getDailyMeasure(journal.id)
     }, [journal]);
+
+    const getDailyMeasure = (journalId) => {
+        api
+            .get(`/api/dailymeasures/?journal=${journalId}`)
+            .then((res) => res.data)
+            .then((data) => {
+                setDailyMeasure(data.filter(dailyMeasure => dailyMeasure.journal === journalId))
+            })
+            .catch((err) => alert(err));
+    };
+    
 
     const getDailyHabits = (journalId) => {
         api
@@ -54,7 +68,13 @@ const JournalComponent = ({ journal, deleteJournal }) => {
                                 </div>
                             ))}
                             
-                            <p>Weight: {journal.weight}</p>
+                            {dailyMeasure.map(dailyMeasure => (
+                                <div key={dailyMeasure.id} className="mr-2">
+                                    <p>{dailyMeasure.measure.name}: {dailyMeasure.metric}</p>
+                                </div>
+                            ))}
+                            
+                            <p></p>
 
                             <div className="flex flex-col space-y-2 sm:flex-row sm:space-x-2 sm:space-y-0">
                                 <Tooltip color="primary" content="Edit">

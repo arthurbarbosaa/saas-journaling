@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics
-from .serializers import DailyHabitSerializer, HabitSerializer, UserSerializer, JournalSerializer, MonthSerializer, GoalSerializer
+from .serializers import DailyHabitSerializer, DailyMeasureSerializer, HabitSerializer, MeasureSerializer, UserSerializer, JournalSerializer, MonthSerializer, GoalSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import DailyHabit, Habit, Journal, Month, Goal
+from .models import DailyHabit, DailyMeasure, Habit, Journal, Measure, Month, Goal
 
 class JournalListCreate(generics.ListCreateAPIView):
     serializer_class = JournalSerializer
@@ -156,3 +156,63 @@ class DailyHabitDelete(generics.DestroyAPIView):
     def get_queryset(self):
         user = self.request.user
         return DailyHabit.objects.filter(habit__author=user)
+    
+class MeasureListCreate(generics.ListCreateAPIView):
+    serializer_class = MeasureSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        month_id = self.request.query_params.get('month')
+        if month_id:
+            return Measure.objects.filter(author=user, month__id=month_id)
+        return Measure.objects.filter(author=user)
+
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save(author=self.request.user)
+        else:
+            print(serializer.errors)
+
+class MeasureDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Measure.objects.all()
+    serializer_class = MeasureSerializer
+    permission_classes = [IsAuthenticated]
+
+class MeasureDelete(generics.DestroyAPIView):
+    serializer_class = MeasureSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Measure.objects.filter(author=user)
+
+class DailyMeasureListCreate(generics.ListCreateAPIView):
+    serializer_class = DailyMeasureSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        measure_id = self.request.query_params.get('measure')
+        if measure_id:
+            return DailyMeasure.objects.filter(measure__author=user, measure__id=measure_id)
+        return DailyMeasure.objects.filter(measure__author=user)
+
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save()
+        else:
+            print(serializer.errors)
+
+class DailyMeasureDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = DailyMeasure.objects.all()
+    serializer_class = DailyMeasureSerializer
+    permission_classes = [IsAuthenticated]
+
+class DailyMeasureDelete(generics.DestroyAPIView):
+    serializer_class = DailyMeasureSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return DailyMeasure.objects.filter(measure__author=user)

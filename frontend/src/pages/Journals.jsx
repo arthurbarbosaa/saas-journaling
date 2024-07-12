@@ -10,10 +10,10 @@ function Journals() {
     const [journals, setJournals] = useState([]);
     const [goals, setGoals] = useState([]);
     const [habits, setHabits] = useState([])
+    const [measure, setMeasure] = useState();
     const [selectedMonthId, setSelectedMonthId] = useState(null);
     const [selectedMonthName, setSelectedMonthName] = useState("");
     const [highlight, setHighlight] = useState("");
-    const [weight, setWeight] = useState("");
     const [goalName, setGoalName] = useState("");
     const [showForm, setShowForm] = useState(false);
     const [showGoalForm, setShowGoalForm] = useState(false);
@@ -26,8 +26,29 @@ function Journals() {
             getGoals(monthId);
             getMonth(monthId);
             getHabits(monthId);
+            getMeasure(monthId);
         }
     }, [monthId]);
+
+    const getMeasure = (monthId) => {
+        api
+            .get(`/api/measures/?month=${monthId}`)
+            .then((res) => res.data)
+            .then((data) => {
+                setMeasure(data);
+            })
+            .catch((err) => alert(err));
+    };
+
+    const createDailyMeasure = async (journalId, measure) => {
+        try {
+            await api.post("/api/dailymeasures/", { journal_id: journalId, measure_id: measure[0].id });
+        } catch (error) {
+            console.error('Error creating daily measure:', error);
+        }
+    };
+    
+    
 
     const getJournals = (monthId) => {
         api
@@ -109,11 +130,12 @@ function Journals() {
         }
 
         api
-            .post("/api/journals/", { highlight, weight, month_id: selectedMonthId })
+            .post("/api/journals/", { highlight, month_id: selectedMonthId })
             .then(async (res) => {
                 if (res.status === 201) {
                     alert("Journal created!");
                     const journalId = res.data.id;
+                    await createDailyMeasure(journalId, measure)
                     await createDailyHabits(journalId, habits);
                 } 
                 else alert("Failed to make Journal.");
@@ -201,19 +223,6 @@ function Journals() {
                                         value={highlight}
                                         onChange={(e) => setHighlight(e.target.value)}
                                         required
-                                    />
-                                </div>
-                                <div>
-                                    <label htmlFor="weight">Weight:</label>
-                                    <Input
-                                        clearable
-                                        bordered
-                                        fullWidth
-                                        color="primary"
-                                        size="lg"
-                                        placeholder=""
-                                        value={weight}
-                                        onChange={(e) => setWeight(e.target.value)}
                                     />
                                 </div>
                                 <div className="col-span-1 sm:col-span-2 flex justify-center mt-4">

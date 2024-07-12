@@ -12,7 +12,6 @@ class Month(models.Model):
 class Journal(models.Model):
     created_at = models.DateField(auto_now_add=True)
     highlight = models.CharField(max_length=255)
-    weight = models.CharField(max_length=5)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="journals")
     month = models.ForeignKey(Month, on_delete=models.CASCADE, related_name="journals")
 
@@ -44,3 +43,19 @@ class DailyHabit(models.Model):
 
     def __str__(self):
         return self.habit.name
+    
+class Measure(models.Model):
+    name = models.CharField(max_length=255)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="measures")
+    month = models.ForeignKey(Month, on_delete=models.CASCADE, related_name="measures")
+
+    def __str__(self):
+        return self.name
+    
+class DailyMeasure(models.Model):
+    metric = models.FloatField(default=0.0)
+    measure = models.ForeignKey(Measure, on_delete=models.CASCADE, related_name="daily_measure")
+    journal = models.ForeignKey(Journal, on_delete=models.CASCADE, related_name="daily_measure")
+
+    def __str__(self):
+        return self.measure.name

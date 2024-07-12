@@ -17,4 +17,10 @@ urlpatterns = [
     path('dailyhabits/', views.DailyHabitListCreate.as_view(), name='dailyhabit-list-create'),
     path('dailyhabits/<int:pk>/', views.DailyHabitDetail.as_view(), name='dailyhabit-detail'),
     path('dailyhabits/<int:pk>/delete/', views.DailyHabitDelete.as_view(), name='dailyhabit-delete'),
+    path('measures/', views.MeasureListCreate.as_view(), name='measure-list-create'),
+    path('measures/<int:pk>/', views.MeasureDetail.as_view(), name='measure-detail'),
+    path('measures/<int:pk>/delete/', views.MeasureDelete.as_view(), name='measure-delete'),
+    path('dailymeasures/', views.DailyMeasureListCreate.as_view(), name='dailymeasure-list-create'),
+    path('dailymeasures/<int:pk>/', views.DailyMeasureDetail.as_view(), name='dailymeasure-detail'),
+    path('dailymeasures/<int:pk>/delete/', views.DailyMeasureDelete.as_view(), name='dailymeasure-delete'),
 ]

@@ -8,6 +8,7 @@ function Months() {
     const [months, setMonths] = useState([]);
     const [name, setName] = useState("");
     const [habits, setHabits] = useState([{ name: "" }]);
+    const [measureName, setMeasureName] = useState("");
     const [showForm, setShowForm] = useState(false);
 
     useEffect(() => {
@@ -43,6 +44,7 @@ function Months() {
                 if (res.status === 201) {
                     const monthId = res.data.id;
                     createHabits(monthId);
+                    createMeasure(monthId, measureName);
                     alert("Month created!");
                 } else {
                     alert("Failed to create month.");
@@ -66,6 +68,19 @@ function Months() {
                 })
                 .catch((err) => alert(err));
         });
+    };
+
+    const createMeasure = (monthId, measureName) => {
+        api
+            .post("/api/measures/", { name: measureName, month_id: monthId })
+            .then((res) => {
+                if (res.status === 201) {
+                    alert(`Measure ${measureName} created!`);
+                } else {
+                    alert(`Failed to create measure.`);
+                }
+            })
+            .catch((err) => alert(err));
     };
 
     const handleHabitChange = (index, event) => {
@@ -113,7 +128,7 @@ function Months() {
                             <h2>Create a Month</h2>
                             <form onSubmit={createMonth} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div className="col-span-2">
-                                    <label htmlFor="name">Name:</label>
+                                    <label htmlFor="name">Month:</label>
                                     <Input
                                         clearable
                                         bordered
@@ -123,6 +138,20 @@ function Months() {
                                         placeholder=""
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div className="col-span-2">
+                                    <label htmlFor="measureName">Measure:</label>
+                                    <Input
+                                        clearable
+                                        bordered
+                                        fullWidth
+                                        color="primary"
+                                        size="lg"
+                                        placeholder=""
+                                        value={measureName}
+                                        onChange={(e) => setMeasureName(e.target.value)}
                                         required
                                     />
                                 </div>
