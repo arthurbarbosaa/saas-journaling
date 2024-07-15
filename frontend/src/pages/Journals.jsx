@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 function Journals() {
     const [journals, setJournals] = useState([]);
     const [goals, setGoals] = useState([]);
-    const [habits, setHabits] = useState([])
+    const [habits, setHabits] = useState([]);
     const [measure, setMeasure] = useState();
     const [selectedMonthId, setSelectedMonthId] = useState(null);
     const [selectedMonthName, setSelectedMonthName] = useState("");
@@ -17,6 +17,8 @@ function Journals() {
     const [goalName, setGoalName] = useState("");
     const [showForm, setShowForm] = useState(false);
     const [showGoalForm, setShowGoalForm] = useState(false);
+    const [habitStatus, setHabitStatus] = useState({});
+    const [measureValue, setMeasureValue] = useState("");
     const { monthId } = useParams(); // Assume que monthId é passado como parâmetro de URL
 
     useEffect(() => {
@@ -42,13 +44,11 @@ function Journals() {
 
     const createDailyMeasure = async (journalId, measure) => {
         try {
-            await api.post("/api/dailymeasures/", { journal_id: journalId, measure_id: measure[0].id });
+            await api.post("/api/dailymeasures/", { journal_id: journalId, measure_id: measure[0].id, metric: measureValue });
         } catch (error) {
             console.error('Error creating daily measure:', error);
         }
     };
-    
-    
 
     const getJournals = (monthId) => {
         api
@@ -76,6 +76,11 @@ function Journals() {
             .then((res) => res.data)
             .then((data) => {
                 setHabits(data);
+                const initialHabitStatus = {};
+                data.forEach(habit => {
+                    initialHabitStatus[habit.id] = false;
+                });
+                setHabitStatus(initialHabitStatus);
             })
             .catch((err) => alert(err));
     };
@@ -115,7 +120,7 @@ function Journals() {
     const createDailyHabits = async (journalId, habits) => {
         try {
             for (const habit of habits) {
-                await api.post("/api/dailyhabits/", { journal_id: journalId, habit_id: habit.id,});
+                await api.post("/api/dailyhabits/", { journal_id: journalId, habit_id: habit.id, is_practiced: habitStatus[habit.id] });
             }
         } catch (error) {
             console.error('Error creating daily habits:', error);
@@ -135,11 +140,11 @@ function Journals() {
                 if (res.status === 201) {
                     alert("Journal created!");
                     const journalId = res.data.id;
-                    await createDailyMeasure(journalId, measure)
+                    await createDailyMeasure(journalId, measure);
                     await createDailyHabits(journalId, habits);
-                } 
-                else alert("Failed to make Journal.");
+                } else alert("Failed to make Journal.");
                 getJournals(selectedMonthId);
+                setHabitStatus([])
                 setShowForm(false);
             })
             .catch((err) => alert(err));
@@ -173,20 +178,26 @@ function Journals() {
             })
             .catch((err) => alert(err));
     };
-    
+
+    const handleHabitChange = (habitId) => {
+        setHabitStatus({
+            ...habitStatus,
+            [habitId]: !habitStatus[habitId]
+        });
+    };
 
     return (
         <div className="">
             <NavbarComponent />
             <div>{selectedMonthName && <h1 className="text-center mt-4 mb-2 text-2xl font-bold">{selectedMonthName}</h1>}</div>
-                <div className="m-6">
+            <div className="m-6">
                 {journals.map(journal => (
                     <JournalComponent key={journal.id} journal={journal} deleteJournal={deleteJournal} />
                 ))}
                 <div className="mt-6">
                     <h2 className="text-xl font-bold mb-4">Goals</h2>
                     {goals.map(goal => (
-                        <GoalComponent key={goal.id} goal={goal} deleteGoal={deleteGoal} updateGoalCompletion={updateGoalCompletion}/>
+                        <GoalComponent key={goal.id} goal={goal} deleteGoal={deleteGoal} updateGoalCompletion={updateGoalCompletion} />
                     ))}
                 </div>
             </div>
@@ -224,6 +235,33 @@ function Journals() {
                                         onChange={(e) => setHighlight(e.target.value)}
                                         required
                                     />
+                                </div>
+                                <div>
+                                    <label htmlFor="measure">{measure[0].name}:</label>
+                                    <Input
+                                        clearable
+                                        bordered
+                                        fullWidth
+                                        color="primary"
+                                        size="lg"
+                                        placeholder=""
+                                        value={measureValue}
+                                        onChange={(e) => setMeasureValue(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label>Habits:</label>
+                                    {habits.map(habit => (
+                                        <div key={habit.id}>
+                                            <Checkbox
+                                                checked={habitStatus[habit.id]}
+                                                onChange={() => handleHabitChange(habit.id)}
+                                            >
+                                                {habit.name}
+                                            </Checkbox>
+                                        </div>
+                                    ))}
                                 </div>
                                 <div className="col-span-1 sm:col-span-2 flex justify-center mt-4">
                                     <Button color="primary" type="submit">
