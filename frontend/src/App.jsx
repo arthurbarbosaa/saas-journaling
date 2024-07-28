@@ -6,6 +6,7 @@ import Register from "./pages/Register";
 import Journals from "./pages/Journals";
 import NotFound from "./pages/NotFound";
 import Months from "./pages/Months";
+import LandingPage from "./pages/LandingPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function Logout() {
@@ -25,9 +26,7 @@ function App() {
         <Route
           path="/"
           element={
-            <ProtectedRoute>
-              <Journals />
-            </ProtectedRoute>
+            <LandingPage/>
           }
         />
         <Route
