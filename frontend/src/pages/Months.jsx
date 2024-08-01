@@ -101,7 +101,7 @@ function Months() {
     return (
         <div className="">
             <NavbarComponent />
-            <div className="m-6">
+            <div className="max-w-7xl mx-auto px-8 py-8 flex flex-wrap justify-center gap-6 ">
                 {months.map(month => (
                     <MonthComponent key={month.id} month={month} deleteMonth={deleteMonth} />
                 ))}

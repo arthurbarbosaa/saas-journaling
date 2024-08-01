@@ -36,7 +36,7 @@ const NavbarComponent = () => {
                 </NavbarItem>
                 <NavbarItem>
                     <Link color="foreground" href="#">
-                        Configurations
+                        Settings
                     </Link>
                 </NavbarItem>
             </NavbarContent>

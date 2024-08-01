@@ -189,99 +189,121 @@ function Journals() {
     return (
         <div className="">
             <NavbarComponent />
-            <div>{selectedMonthName && <h1 className="text-center mt-4 mb-2 text-2xl font-bold">{selectedMonthName}</h1>}</div>
-            <div className="m-6">
-                {journals.map(journal => (
-                    <JournalComponent key={journal.id} journal={journal} deleteJournal={deleteJournal} />
-                ))}
-                <div className="mt-6">
-                    <h2 className="text-xl font-bold mb-4">Goals</h2>
-                    {goals.map(goal => (
-                        <GoalComponent key={goal.id} goal={goal} deleteGoal={deleteGoal} updateGoalCompletion={updateGoalCompletion} />
-                    ))}
-                </div>
-            </div>
-            <div className="flex justify-center mt-4 mb-6">
-                <Button className="bg-primary text-white" onClick={() => setShowForm(!showForm)}>
-                    {showForm ? "Cancel" : "Add New Journal +"}
-                </Button>
-                <Button className="bg-primary text-white ml-4" onClick={() => setShowGoalForm(!showGoalForm)}>
-                    {showGoalForm ? "Cancel" : "Add New Goal +"}
-                </Button>
-            </div>
-            {showForm && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
-                    <div className="card w-96 bg-base-100 shadow-xl">
-                        <div className="card-body">
-                            <div className="card-actions justify-end">
-                                <Button color="danger" onClick={() => setShowForm(false)}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </Button>
-                            </div>
-                            <h2>Create a Register</h2>
-                            <form onSubmit={createJournal} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label htmlFor="highlight">Highlight:</label>
-                                    <Input
-                                        clearable
-                                        bordered
-                                        fullWidth
-                                        color="primary"
-                                        size="lg"
-                                        placeholder=""
-                                        value={highlight}
-                                        onChange={(e) => setHighlight(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label htmlFor="measure">{measure[0].name}:</label>
-                                    <Input
-                                        clearable
-                                        bordered
-                                        fullWidth
-                                        color="primary"
-                                        size="lg"
-                                        placeholder=""
-                                        value={measureValue}
-                                        onChange={(e) => setMeasureValue(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label>Habits:</label>
-                                    {habits.map(habit => (
-                                        <div key={habit.id}>
-                                            <Checkbox
-                                                checked={habitStatus[habit.id]}
-                                                onChange={() => handleHabitChange(habit.id)}
-                                            >
-                                                {habit.name}
-                                            </Checkbox>
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="col-span-1 sm:col-span-2 flex justify-center mt-4">
-                                    <Button color="primary" type="submit">
-                                        Save
-                                    </Button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+            {selectedMonthName && (
+                <div className="text-center mt-4 mb-2">
+                <h1 className="text-2xl font-bold">{selectedMonthName}</h1>
                 </div>
             )}
+
+            <div className="max-w-7xl mx-auto px-8 py-8 flex flex-col md:flex-row gap-6 md:gap-10">
+                {/* Journals Section */}
+                <div className="flex-1">
+                    <h2 className="text-xl font-bold mb-4 text-center">Registers</h2>
+                    {journals.map(journal => (
+                    <JournalComponent key={journal.id} journal={journal} deleteJournal={deleteJournal} />
+                    ))}
+                    <div className="flex justify-center mt-4">
+                    <Button className="bg-primary text-white" onClick={() => setShowForm(!showForm)}>
+                        {showForm ? "Cancel" : "Add New Journal +"}
+                    </Button>
+                    </div>
+                </div>
+
+                {/* Goals Section */}
+                <div className="flex-1 mt-6  md:mt-0">
+                            <h2 className="text-xl font-bold mb-4 text-center">Goals</h2>
+                            {goals.length > 0 && (
+                                <div className="card w-full bg-base-100 shadow-xl mb-8">
+                                    <div className="card-body">
+                                    {goals.map(goal => (
+                                    <GoalComponent key={goal.id} goal={goal} deleteGoal={deleteGoal} updateGoalCompletion={updateGoalCompletion} />
+                                    ))}
+                                    </div>
+                                </div>
+                            )}
+                            <div className="flex justify-center mt-4">
+                            <Button className="bg-primary text-white" onClick={() => setShowGoalForm(!showGoalForm)}>
+                                {showGoalForm ? "Cancel" : "Add New Goal +"}
+                            </Button>
+                            </div>
+                </div>
+            </div>
+
+
+            {showForm && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+                <div className="card w-96 bg-base-100 shadow-xl">
+                    <div className="card-body">
+                    <div className="card-actions justify-end">
+                        <Button color="danger" onClick={() => setShowForm(false)}>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                        </Button>
+                    </div>
+                    <h2>Create a Register</h2>
+                    <form onSubmit={createJournal} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                        <label htmlFor="highlight">Highlight:</label>
+                        <Input
+                            clearable
+                            bordered
+                            fullWidth
+                            color="primary"
+                            size="lg"
+                            placeholder=""
+                            value={highlight}
+                            onChange={(e) => setHighlight(e.target.value)}
+                            required
+                        />
+                        </div>
+                        <div>
+                        <label htmlFor="measure">{measure[0].name}:</label>
+                        <Input
+                            clearable
+                            bordered
+                            fullWidth
+                            color="primary"
+                            size="lg"
+                            placeholder=""
+                            value={measureValue}
+                            onChange={(e) => setMeasureValue(e.target.value)}
+                            required
+                        />
+                        </div>
+                        <div>
+                        <label>Habits:</label>
+                        {habits.map(habit => (
+                            <div key={habit.id}>
+                            <Checkbox
+                                checked={habitStatus[habit.id]}
+                                onChange={() => handleHabitChange(habit.id)}
+                            >
+                                {habit.name}
+                            </Checkbox>
+                            </div>
+                        ))}
+                        </div>
+                        <div className="col-span-1 sm:col-span-2 flex justify-center mt-4">
+                        <Button color="primary" type="submit">
+                            Save
+                        </Button>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+                </div>
+            )}
+
             {showGoalForm && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
                     <div className="card w-96 bg-base-100 shadow-xl">
                         <div className="card-body">
                             <div className="card-actions justify-end">
                                 <Button color="danger" onClick={() => setShowGoalForm(false)}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
                                 </Button>
                             </div>
                             <h2>Create a Goal</h2>
@@ -311,6 +333,7 @@ function Journals() {
                 </div>
             )}
         </div>
+
     );
 }
 
