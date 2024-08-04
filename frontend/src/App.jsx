@@ -8,6 +8,8 @@ import NotFound from "./pages/NotFound";
 import Months from "./pages/Months";
 import LandingPage from "./pages/LandingPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import TermsOfUse from "./pages/TermsOfUse";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 function Logout() {
   localStorage.clear(); // limpa os tokens
@@ -27,6 +29,18 @@ function App() {
           path="/"
           element={
             <LandingPage/>
+          }
+        />
+        <Route
+          path="/tou"
+          element={
+            <TermsOfUse/>
+          }
+        />
+        <Route
+          path="/pp"
+          element={
+            <PrivacyPolicy/>
           }
         />
         <Route

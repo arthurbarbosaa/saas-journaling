@@ -7,6 +7,7 @@ import {Avatar, AvatarGroup} from "@nextui-org/react";
 import {Link, Navbar, NavbarBrand, NavbarContent, NavbarItem,} from "@nextui-org/react";
 
 import journalingLogo from "../assets/journaling_logo_blue-removebg.png"
+import journalingLogoW from "../assets/journaling_logo_blue_w-removebg.png"
 import doneAll from "../assets/done_all_black-removebg.png"
 import moneyOff from "../assets/money_off.png"
 import star from "../assets/star.png"
@@ -214,117 +215,119 @@ function LandingPage() {
         </div>
       </div>
 
-      <div id="demo" className="hero bg-base min-h-screen">
-        <div className="hero-content text-center flex-col ">
+      <div id="demo" className="py-24 max-md:px-8 max-w-3xl mx-auto">
+        <div className="text-center flex flex-col items-center">
           <p className="py-3 text-lg leading-relaxed font-bold">How it works?</p>
-          <div className="">
             <iframe
-              className="w-full h-96 rounded-lg shadow-lg"
-              src="https://www.youtube.com/embed/VIDEO_ID"
+              className="w-full h-64 md:h-96 rounded-lg shadow-lg"
+              src="https://www.youtube.com/embed/8M1jmcYBl-U"
               title="YouTube video player"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             ></iframe>
-          </div>
+
         </div>
       </div>
+
+      
+
       
 
 
         <div id="pricing" className="hero bg-base-200 min-h-screen">
-    <div className="hero-content text-center flex-col">
-      <div className="mb-20">
-        <p className="py-3 text-lg leading-relaxed font-bold text-blue-600">Pricing</p>
-        <h1 className="text-5xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter mb-8">Join the team.</h1>
-        <span className="mr-1 text-green-500">80% off </span><span>for the first 100 customers!</span>
-      </div>
-
-      <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
-        <div className="card bg-base-100 w-96 shadow-xl">
-          <div className="card-body">
-            <div className="flex items-baseline space-x-2">
-              <span className="text-lg text-gray-500 line-through">$100</span>
-              <span className="text-4xl text-base-content font-bold">$20</span>
-              <span className="text-sm text-gray-500">USD</span>
+          <div className="hero-content text-center flex-col">
+            <div className="mb-20">
+              <p className="py-3 text-lg leading-relaxed font-bold text-blue-600">Pricing</p>
+              <h1 className="text-5xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter mb-8">Join the team</h1>
+              <span className="mr-1 text-green-500">80% off </span><span>for the first 100 customers!</span>
             </div>
-            <h2 className="card-title mt-4 mb-6">Starter</h2>
 
-            {/* Listagem de Funcionalidades */}
-            <ul className="space-y-2 mb-6">
-              <li className="flex items-center">
-                <img src={doneOne} alt="Icon" className="w-5 h-5 mr-2" />
-                <span>Day highlight</span>
-              </li>
-              <li className="flex items-center">
-                <img src={doneOne} alt="Icon" className="w-5 h-5 mr-2" />
-                <span>Set goals</span>
-              </li>
-              <li className="flex items-center">
-                <img src={doneOne} alt="Icon" className="w-5 h-5 mr-2" />
-                <span>Track habits</span>
-              </li>
-              <li className="flex items-center">
-                <img src={doneOne} alt="Icon" className="w-5 h-5 mr-2" />
-                <span>Monitor measures</span>
-              </li>
-              <li className="flex items-center">
-                <img src={close} alt="Icon" className="w-5 h-5 mr-2" />
-                <span className="text-gray-400">Future features</span>
-              </li>
-            </ul>
+            <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
+              <div className="card bg-base-100 max-w-sm sm:w-96 shadow-xl">
+                <div className="card-body">
+                  <div className="flex items-baseline space-x-2">
+                    <span className="text-lg text-gray-500 line-through">$100</span>
+                    <span className="text-4xl text-base-content font-bold">$20</span>
+                    <span className="text-sm text-gray-500">USD</span>
+                  </div>
+                  <h2 className="card-title mt-4 mb-6">Starter</h2>
 
-            <div className="card-actions justify-center">
-              <Button color="primary" className="mt-8 h-12 w-60 text-white">
-                <img src={doneAll} alt="Logo" className="h-5 w-5" />
-                Get Journaling
-              </Button>
+                  {/* Listagem de Funcionalidades */}
+                  <ul className="space-y-2 mb-6">
+                    <li className="flex items-center">
+                      <img src={doneOne} alt="Icon" className="w-5 h-5 mr-2" />
+                      <span>Day highlight</span>
+                    </li>
+                    <li className="flex items-center">
+                      <img src={doneOne} alt="Icon" className="w-5 h-5 mr-2" />
+                      <span>Set goals</span>
+                    </li>
+                    <li className="flex items-center">
+                      <img src={doneOne} alt="Icon" className="w-5 h-5 mr-2" />
+                      <span>Track habits</span>
+                    </li>
+                    <li className="flex items-center">
+                      <img src={doneOne} alt="Icon" className="w-5 h-5 mr-2" />
+                      <span>Monitor measures</span>
+                    </li>
+                    <li className="flex items-center">
+                      <img src={close} alt="Icon" className="w-5 h-5 mr-2" />
+                      <span className="text-gray-400">Future features</span>
+                    </li>
+                  </ul>
+
+                  <div className="card-actions justify-center">
+                    <Button color="primary" className="mt-8 h-12 w-60 text-white">
+                      <img src={doneAll} alt="Logo" className="h-5 w-5" />
+                      Get Journaling
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="card bg-base-100 max-w-sm sm:w-96 shadow-xl ">
+                <div className="card-body">
+                  <div className="flex items-baseline space-x-2">
+                    <span className="text-lg text-gray-500 line-through">$100</span>
+                    <span className="text-4xl text-base-content font-bold">$20</span>
+                    <span className="text-sm text-gray-500">USD</span>
+                  </div>
+                  <h2 className="card-title mt-4 mb-6">All in</h2>
+
+                  {/* Listagem de Funcionalidades */}
+                  <ul className="space-y-2 mb-6">
+                    <li className="flex items-center">
+                      <img src={doneOne} alt="Icon" className="w-5 h-5 mr-2" />
+                      <span>Day highlight</span>
+                    </li>
+                    <li className="flex items-center">
+                      <img src={doneOne} alt="Icon" className="w-5 h-5 mr-2" />
+                      <span>Set goals</span>
+                    </li>
+                    <li className="flex items-center">
+                      <img src={doneOne} alt="Icon" className="w-5 h-5 mr-2" />
+                      <span>Track habits</span>
+                    </li>
+                    <li className="flex items-center">
+                      <img src={doneOne} alt="Icon" className="w-5 h-5 mr-2" />
+                      <span>Monitor measures</span>
+                    </li>
+                    <li className="flex items-center">
+                      <img src={doneOne} alt="Icon" className="w-5 h-5 mr-2" />
+                      <span>Future features</span>
+                    </li>
+                  </ul>
+
+                  <div className="card-actions justify-center">
+                    <Button color="primary" className="mt-8 h-12 w-60 text-white">
+                      <img src={doneAll} alt="Logo" className="h-5 w-5" />
+                      Get Journaling
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div className="card bg-base-100 w-96 shadow-xl">
-          <div className="card-body">
-            <div className="flex items-baseline space-x-2">
-              <span className="text-lg text-gray-500 line-through">$100</span>
-              <span className="text-4xl text-base-content font-bold">$20</span>
-              <span className="text-sm text-gray-500">USD</span>
-            </div>
-            <h2 className="card-title mt-4 mb-6">All in</h2>
-
-            {/* Listagem de Funcionalidades */}
-            <ul className="space-y-2 mb-6">
-              <li className="flex items-center">
-                <img src={doneOne} alt="Icon" className="w-5 h-5 mr-2" />
-                <span>Day highlight</span>
-              </li>
-              <li className="flex items-center">
-                <img src={doneOne} alt="Icon" className="w-5 h-5 mr-2" />
-                <span>Set goals</span>
-              </li>
-              <li className="flex items-center">
-                <img src={doneOne} alt="Icon" className="w-5 h-5 mr-2" />
-                <span>Track habits</span>
-              </li>
-              <li className="flex items-center">
-                <img src={doneOne} alt="Icon" className="w-5 h-5 mr-2" />
-                <span>Monitor measures</span>
-              </li>
-              <li className="flex items-center">
-                <img src={doneOne} alt="Icon" className="w-5 h-5 mr-2" />
-                <span>Future features</span>
-              </li>
-            </ul>
-
-            <div className="card-actions justify-center">
-              <Button color="primary" className="mt-8 h-12 w-60 text-white">
-                <img src={doneAll} alt="Logo" className="h-5 w-5" />
-                Get Journaling
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 
       
@@ -333,31 +336,20 @@ function LandingPage() {
 
       <footer className="footer bg-base-200 text-base-content p-10">
         <aside>
-        <img src={journalingLogo} alt="Full-logo" className="w-40" />
-          <p>
+        <img src={journalingLogoW} alt="Full-logo" className="w-40" />
+          <p className="">
           Track your life with Journaling<br/>
           Copyright © 2024 - All rights reserved
           </p>
         </aside>
-        <nav>
-          <h6 className="footer-title">Services</h6>
-          <a className="link link-hover">Branding</a>
-          <a className="link link-hover">Design</a>
-          <a className="link link-hover">Marketing</a>
-          <a className="link link-hover">Advertisement</a>
-        </nav>
-        <nav>
+        <nav className="felx justify-center">
           <h6 className="footer-title">Company</h6>
-          <a className="link link-hover">About us</a>
-          <a className="link link-hover">Contact</a>
-          <a className="link link-hover">Jobs</a>
-          <a className="link link-hover">Press kit</a>
+          <a href="mailto:support@journaling.com" className="link link-hover">Contact: support@journaling.com</a>
         </nav>
         <nav>
           <h6 className="footer-title">Legal</h6>
-          <a className="link link-hover">Terms of use</a>
-          <a className="link link-hover">Privacy policy</a>
-          <a className="link link-hover">Cookie policy</a>
+          <a className="link link-hover" href="/tou">Terms of use</a>
+          <a className="link link-hover" href="/pp">Privacy policy</a>
         </nav>
       </footer>
 
