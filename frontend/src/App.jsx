@@ -10,6 +10,7 @@ import LandingPage from "./pages/LandingPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import TermsOfUse from "./pages/TermsOfUse";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Settings from "./pages/Settings";
 
 function Logout() {
   localStorage.clear(); // limpa os tokens
@@ -41,6 +42,14 @@ function App() {
           path="/pp"
           element={
             <PrivacyPolicy/>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
           }
         />
         <Route
