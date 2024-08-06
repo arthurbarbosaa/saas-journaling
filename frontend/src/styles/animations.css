@@ -1,0 +1,21 @@
+/* Define a animação combinada slide-in-top e fade-out */
+@keyframes slide-in-fade-out {
+    0% {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    25% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    85% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.slide-in-fade-out {
+    animation: slide-in-fade-out 3s ease-out;
+}

@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
 import api from "../api";
+import { Input, Button, Card, CardBody, Tooltip} from "@nextui-org/react";
+import { DeleteIcon } from "../assets/DeleteIcon";
 import NavbarComponent from "../components/NavbarComponent";
-import { Input, Button } from "@nextui-org/react";
 import MonthComponent from "../components/MonthComponent";
+
+import doneOneWhite from "../assets/done_one_white.png";
+import closeWhite from "../assets/close_white.png";
+import warningWhite from "../assets/warning_white.png";
+
+import '../styles/animations.css';
 
 function Months() {
     const [months, setMonths] = useState([]);
@@ -10,6 +17,7 @@ function Months() {
     const [habits, setHabits] = useState([{ name: "" }]);
     const [measureName, setMeasureName] = useState("");
     const [showForm, setShowForm] = useState(false);
+    const [alert, setAlert] = useState(null);
 
     useEffect(() => {
         getMonths();
@@ -22,22 +30,28 @@ function Months() {
             .then((data) => {
                 setMonths(data);
             })
-            .catch((err) => alert(err));
+            .catch((err) => showErrorAlert(err.message));
     };
 
     const deleteMonth = (id) => {
         api
             .delete(`/api/months/delete/${id}/`)
             .then((res) => {
-                if (res.status === 204) alert("Month deleted!");
-                else alert("Failed to delete month.");
+                if (res.status === 204) showSuccessAlert("Month deleted");
+                else showWarningAlert("Failed to delete month");
                 getMonths();
             })
-            .catch((error) => alert(error));
+            .catch((error) => showErrorAlert(error.message));
     };
 
     const createMonth = (e) => {
         e.preventDefault();
+        
+        if (!name || !measureName || habits.some(habit => !habit.name)) {
+            showWarningAlert("Please fill out all fields");
+            return;
+        }
+
         api
             .post("/api/months/", { name })
             .then((res) => {
@@ -45,42 +59,28 @@ function Months() {
                     const monthId = res.data.id;
                     createHabits(monthId);
                     createMeasure(monthId, measureName);
-                    alert("Month created!");
+                    showSuccessAlert("Month created");
                 } else {
-                    alert("Failed to create month.");
+                    showWarningAlert("Failed to create month");
                 }
                 getMonths();
                 setShowForm(false);
             })
-            .catch((err) => alert(err));
+            .catch((err) => showErrorAlert(err.message));
     };
 
     const createHabits = (monthId) => {
         habits.forEach(habit => {
             api
                 .post("/api/habits/", { name: habit.name, month_id: monthId })
-                .then((res) => {
-                    if (res.status === 201) {
-                        alert(`Habit ${habit.name} created!`);
-                    } else {
-                        alert(`Failed to create ${habit.name}.`);
-                    }
-                })
-                .catch((err) => alert(err));
+                .catch((err) => showErrorAlert(err.message));
         });
     };
 
     const createMeasure = (monthId, measureName) => {
         api
             .post("/api/measures/", { name: measureName, month_id: monthId })
-            .then((res) => {
-                if (res.status === 201) {
-                    alert(`Measure ${measureName} created!`);
-                } else {
-                    alert(`Failed to create measure.`);
-                }
-            })
-            .catch((err) => alert(err));
+            .catch((err) => showErrorAlert(err.message));
     };
 
     const handleHabitChange = (index, event) => {
@@ -98,14 +98,65 @@ function Months() {
         setHabits(newHabits);
     };
 
+    const showSuccessAlert = (message) => {
+        setAlert(
+            <div className="slide-in-fade-out">
+                <Card className="bg-primary text-white">
+                    <CardBody className="flex-row">
+                        <span>{message}</span>
+                        <img className="w-5 ml-2" src={doneOneWhite} alt="Icon" />
+                    </CardBody>
+                </Card>
+            </div>
+        );
+        clearAlert();
+    };
+
+    const showWarningAlert = (message) => {
+        setAlert(
+            <div className="slide-in-fade-out">
+                <Card className="bg-warning text-white">
+                    <CardBody className="flex-row">
+                        <span>{message}</span>
+                        <img className="w-5 ml-2" src={warningWhite} alt="Icon" />
+                    </CardBody>
+                </Card>
+            </div>
+        );
+        clearAlert();
+    };
+
+    const showErrorAlert = (message) => {
+        setAlert(
+            <div className="slide-in-fade-out">
+                <Card className="bg-danger text-white">
+                    <CardBody className="flex-row">
+                        <span>{message}</span>
+                        <img className="w-5 ml-2" src={closeWhite} alt="Icon" />
+                    </CardBody>
+                </Card>
+            </div>
+        );
+        clearAlert();
+    };
+
+    const clearAlert = () => {
+        setTimeout(() => setAlert(null), 3000); // Clear alert after 3 seconds
+    };
+
     return (
         <div className="">
             <NavbarComponent />
-            <div className="max-w-7xl mx-auto px-8 py-8 flex flex-wrap justify-center gap-6 ">
+            <div className="max-w-7xl mx-auto px-8 py-8 flex flex-wrap justify-center gap-6">
                 {months.map(month => (
                     <MonthComponent key={month.id} month={month} deleteMonth={deleteMonth} />
                 ))}
             </div>
+            {alert && (
+                <div className="fixed top-5 left-1/2 transform -translate-x-1/2 z-50">
+                    {alert}
+                </div>
+            )}
             <div className="flex justify-center mt-4 mb-6">
                 <Button className="bg-primary text-white" onClick={() => setShowForm(!showForm)}>
                     {showForm ? "Cancel" : "Add New Month +"}
@@ -117,23 +168,23 @@ function Months() {
                         <div className="card-body">
                             <div className="card-actions justify-end">
                                 <Button
+                                    radius="full"
+                                    size="sm"
                                     color="danger"
                                     onClick={() => setShowForm(false)}
                                 >
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
+                                    <img className="w-5" src={closeWhite} alt="Icon" />
                                 </Button>
                             </div>
-                            <h2>Create a Month</h2>
+                            <h2 className="text-xl my-4 font-bold text-center">Create a Month</h2>
                             <form onSubmit={createMonth} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div className="col-span-2">
-                                    <label htmlFor="name">Month:</label>
+                                    <label htmlFor="name" color="primary">Month:</label>
                                     <Input
                                         clearable
                                         bordered
                                         fullWidth
-                                        color="primary"
+                                        color=""
                                         size="lg"
                                         placeholder=""
                                         value={name}
@@ -147,7 +198,7 @@ function Months() {
                                         clearable
                                         bordered
                                         fullWidth
-                                        color="primary"
+                                        color=""
                                         size="lg"
                                         placeholder=""
                                         value={measureName}
@@ -163,21 +214,26 @@ function Months() {
                                                 clearable
                                                 bordered
                                                 fullWidth
-                                                color="primary"
+                                                color=""
                                                 size="lg"
                                                 value={habit.name}
                                                 onChange={(e) => handleHabitChange(index, e)}
                                                 required
                                             />
                                             {index > 0 && (
-                                                <Button color="danger" onClick={() => removeHabitField(index)}>
-                                                    -
-                                                </Button>
+                                                <Tooltip color="danger" content="Delete">
+                                                    <span
+                                                        className="text-lg text-danger cursor-pointer active:opacity-50"
+                                                        onClick={() => removeHabitField(index)}
+                                                    >
+                                                        <DeleteIcon />
+                                                    </span>
+                                                </Tooltip>
                                             )}
                                         </div>
                                     ))}
-                                    <Button onClick={addHabitField} className="bg-secondary text-white mt-2">
-                                        Add Habit
+                                    <Button color="primary" variant="light" onClick={addHabitField}>
+                                        Add Habit +
                                     </Button>
                                 </div>
                                 <div className="col-span-2 flex justify-center mt-4">
