@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button } from "@nextui-org/react";
 import { useLocation } from "react-router-dom";
+import FeedbackBtn from "./FeedbackBtn";
 import api from "../api";
 
 const NavbarComponent = () => {
@@ -87,6 +88,9 @@ const NavbarComponent = () => {
                     <Button as={Link} color="danger" href="/logout">
                         Logout
                     </Button>
+                </NavbarItem>
+                <NavbarItem>
+                    <FeedbackBtn></FeedbackBtn>
                 </NavbarItem>
             </NavbarContent>
         </Navbar>
