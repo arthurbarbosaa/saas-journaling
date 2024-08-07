@@ -3,8 +3,14 @@ import api from "../api";
 import NavbarComponent from "../components/NavbarComponent";
 import JournalComponent from "../components/JournalComponent";
 import GoalComponent from "../components/GoalComponent";
-import { Checkbox, Input, Button } from "@nextui-org/react";
+import { Checkbox, Input, Button, Card, CardBody} from "@nextui-org/react";
 import { useParams } from "react-router-dom";
+
+import doneOneWhite from "../assets/done_one_white.png";
+import closeWhite from "../assets/close_white.png";
+import warningWhite from "../assets/warning_white.png";
+
+import '../styles/animations.css';
 
 function Journals() {
     const [journals, setJournals] = useState([]);
@@ -19,7 +25,8 @@ function Journals() {
     const [showGoalForm, setShowGoalForm] = useState(false);
     const [habitStatus, setHabitStatus] = useState({});
     const [measureValue, setMeasureValue] = useState("");
-    const { monthId } = useParams(); // Assume que monthId é passado como parâmetro de URL
+    const { monthId } = useParams();
+    const [myAlert, setMyAlert] = useState(null);
 
     useEffect(() => {
         if (monthId) {
@@ -57,7 +64,7 @@ function Journals() {
             .then((data) => {
                 setJournals(data);
             })
-            .catch((err) => alert(err));
+            .catch((err) => showErrorAlert(err));
     };
 
     const getGoals = (monthId) => {
@@ -67,7 +74,7 @@ function Journals() {
             .then((data) => {
                 setGoals(data);
             })
-            .catch((err) => alert(err));
+            .catch((err) => showErrorAlert(err));
     };
 
     const getHabits = (monthId) => {
@@ -82,7 +89,7 @@ function Journals() {
                 });
                 setHabitStatus(initialHabitStatus);
             })
-            .catch((err) => alert(err));
+            .catch((err) => showErrorAlert(err));
     };
 
     const getMonth = (monthId) => {
@@ -92,29 +99,29 @@ function Journals() {
             .then((data) => {
                 setSelectedMonthName(data.name);
             })
-            .catch((err) => alert(err));
+            .catch((err) => showErrorAlert(err));
     };
 
     const deleteJournal = (id) => {
         api
             .delete(`/api/journals/delete/${id}/`)
             .then((res) => {
-                if (res.status === 204) alert("Journal deleted!");
-                else alert("Failed to delete Journal.");
+                if (res.status === 204) showSuccessAlert("Journal deleted");
+                else showWarningAlert("Failed to delete Journal.");
                 getJournals(selectedMonthId);
             })
-            .catch((error) => alert(error));
+            .catch((error) => showErrorAlert(error));
     };
 
     const deleteGoal = (id) => {
         api
             .delete(`/api/goals/delete/${id}/`)
             .then((res) => {
-                if (res.status === 204) alert("Goal deleted!");
-                else alert("Failed to delete Goal.");
+                if (res.status === 204) showSuccessAlert("Goal deleted");
+                else showWarningAlert("Failed to delete Goal.");
                 getGoals(selectedMonthId);
             })
-            .catch((error) => alert(error));
+            .catch((error) => showErrorAlert(error));
     };
 
     const createDailyHabits = async (journalId, habits) => {
@@ -123,14 +130,14 @@ function Journals() {
                 await api.post("/api/dailyhabits/", { journal_id: journalId, habit_id: habit.id, is_practiced: habitStatus[habit.id] });
             }
         } catch (error) {
-            console.error('Error creating daily habits:', error);
+            showErrorAlert('Error creating daily habits:', error);
         }
     };
 
     const createJournal = (e) => {
         e.preventDefault();
         if (!selectedMonthId) {
-            alert("Month not selected!");
+            showWarningAlert("Month not selected");
             return;
         }
 
@@ -138,45 +145,45 @@ function Journals() {
             .post("/api/journals/", { highlight, month_id: selectedMonthId })
             .then(async (res) => {
                 if (res.status === 201) {
-                    alert("Journal created!");
+                    showSuccessAlert("Journal created");
                     const journalId = res.data.id;
                     await createDailyMeasure(journalId, measure);
                     await createDailyHabits(journalId, habits);
-                } else alert("Failed to make Journal.");
+                } else showWarningAlert("Failed to make Journal");
                 getJournals(selectedMonthId);
                 setHabitStatus([])
                 setShowForm(false);
             })
-            .catch((err) => alert(err));
+            .catch((err) => showErrorAlert(err));
     };
 
     const createGoal = (e) => {
         e.preventDefault();
         if (!selectedMonthId) {
-            alert("Month not selected!");
+            showWarningAlert("Month not selected");
             return;
         }
 
         api
             .post("/api/goals/", { name: goalName, month_id: selectedMonthId })
             .then((res) => {
-                if (res.status === 201) alert("Goal created!");
-                else alert("Failed to create Goal.");
+                if (res.status === 201) showSuccessAlert("Goal created");
+                else showWarningAlert("Failed to create Goal");
                 getGoals(selectedMonthId);
                 setShowGoalForm(false);
             })
-            .catch((err) => alert(err));
+            .catch((err) => showErrorAlert(err));
     };
 
     const updateGoalCompletion = (goalId, isCompleted) => {
         api
             .patch(`/api/goals/${goalId}/`, { is_completed: isCompleted })
             .then((res) => {
-                if (res.status === 200) alert("Goal updated!");
-                else alert("Failed to update Goal.");
+                if (res.status === 200) showSuccessAlert("Goal updated");
+                else showWarningAlert("Failed to update Goal");
                 getGoals(selectedMonthId);
             })
-            .catch((err) => alert(err));
+            .catch((err) => showErrorAlert(err));
     };
 
     const handleHabitChange = (habitId) => {
@@ -186,12 +193,63 @@ function Journals() {
         });
     };
 
+    const showSuccessAlert = (message) => {
+        setMyAlert(
+            <div className="slide-in-fade-out">
+                <Card className="bg-primary text-white">
+                    <CardBody className="flex-row">
+                        <span>{message}</span>
+                        <img className="w-5 ml-2" src={doneOneWhite} alt="Icon" />
+                    </CardBody>
+                </Card>
+            </div>
+        );
+        clearAlert();
+    };
+
+    const showWarningAlert = (message) => {
+        setMyAlert(
+            <div className="slide-in-fade-out">
+                <Card className="bg-warning text-white">
+                    <CardBody className="flex-row">
+                        <span>{message}</span>
+                        <img className="w-5 ml-2" src={warningWhite} alt="Icon" />
+                    </CardBody>
+                </Card>
+            </div>
+        );
+        clearAlert();
+    };
+
+    const showErrorAlert = (message) => {
+        setMyAlert(
+            <div className="slide-in-fade-out">
+                <Card className="bg-danger text-white">
+                    <CardBody className="flex-row">
+                        <span>{message}</span>
+                        <img className="w-5 ml-2" src={closeWhite} alt="Icon" />
+                    </CardBody>
+                </Card>
+            </div>
+        );
+        clearAlert();
+    };
+
+    const clearAlert = () => {
+        setTimeout(() => setMyAlert(null), 3000); // Clear alert after 3 seconds
+    };
+
     return (
         <div className="">
             <NavbarComponent />
             {selectedMonthName && (
                 <div className="text-center mt-4 mb-2">
                 <h1 className="text-2xl font-bold">{selectedMonthName}</h1>
+                </div>
+            )}
+            {myAlert && (
+                <div className="fixed top-5 left-1/2 transform -translate-x-1/2 z-50">
+                    {myAlert}
                 </div>
             )}
 
@@ -235,21 +293,25 @@ function Journals() {
                 <div className="card w-96 bg-base-100 shadow-xl">
                     <div className="card-body">
                     <div className="card-actions justify-end">
-                        <Button color="danger" onClick={() => setShowForm(false)}>
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
+                        <Button
+                            radius="full"
+                            size="sm"
+                            color="danger"
+                            onClick={() => setShowForm(false)}
+                        >
+                            <img className="w-5" src={closeWhite} alt="Icon" />
                         </Button>
                     </div>
-                    <h2>Create a Register</h2>
+                    <h2 className="text-xl my-4 font-bold text-center" >Create a Register</h2>
                     <form onSubmit={createJournal} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
+                        <div className="col-span-2">
                         <label htmlFor="highlight">Highlight:</label>
                         <Input
+                            isRequired
                             clearable
                             bordered
                             fullWidth
-                            color="primary"
+                            color=""
                             size="lg"
                             placeholder=""
                             value={highlight}
@@ -257,13 +319,15 @@ function Journals() {
                             required
                         />
                         </div>
-                        <div>
+                        <div className="col-span-2">
                         <label htmlFor="measure">{measure[0].name}:</label>
                         <Input
+                            type="number"
+                            isRequired
                             clearable
                             bordered
                             fullWidth
-                            color="primary"
+                            color=""
                             size="lg"
                             placeholder=""
                             value={measureValue}
@@ -271,7 +335,7 @@ function Journals() {
                             required
                         />
                         </div>
-                        <div>
+                        <div className="col-span-2">
                         <label>Habits:</label>
                         {habits.map(habit => (
                             <div key={habit.id}>
@@ -300,21 +364,24 @@ function Journals() {
                     <div className="card w-96 bg-base-100 shadow-xl">
                         <div className="card-body">
                             <div className="card-actions justify-end">
-                                <Button color="danger" onClick={() => setShowGoalForm(false)}>
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
+                                <Button
+                                radius="full"
+                                size="sm"
+                                color="danger"
+                                onClick={() => setShowGoalForm(false)}
+                                >
+                                    <img className="w-5" src={closeWhite} alt="Icon" />
                                 </Button>
                             </div>
-                            <h2>Create a Goal</h2>
+                            <h2 className="text-xl my-4 font-bold text-center">Create a Goal</h2>
                             <form onSubmit={createGoal} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
+                                <div className="col-span-2">
                                     <label htmlFor="goalName">Goal Name:</label>
                                     <Input
                                         clearable
                                         bordered
                                         fullWidth
-                                        color="primary"
+                                        color=""
                                         size="lg"
                                         placeholder=""
                                         value={goalName}
@@ -338,3 +405,4 @@ function Journals() {
 }
 
 export default Journals;
+

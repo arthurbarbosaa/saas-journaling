@@ -46,11 +46,6 @@ function Months() {
 
     const createMonth = (e) => {
         e.preventDefault();
-        
-        if (!name || !measureName || habits.some(habit => !habit.name)) {
-            showWarningAlert("Please fill out all fields");
-            return;
-        }
 
         api
             .post("/api/months/", { name })
@@ -181,6 +176,7 @@ function Months() {
                                 <div className="col-span-2">
                                     <label htmlFor="name" color="primary">Month:</label>
                                     <Input
+                                        isRequired
                                         clearable
                                         bordered
                                         fullWidth
@@ -195,6 +191,7 @@ function Months() {
                                 <div className="col-span-2">
                                     <label htmlFor="measureName">Measure:</label>
                                     <Input
+                                        isRequired
                                         clearable
                                         bordered
                                         fullWidth
