@@ -9,7 +9,7 @@ const FeedbackBtn = () => {
             </PopoverTrigger>
             <PopoverContent>
                 <div className="px-1 py-2">
-                <Link href="mailto:support@journaling.com">support@journaling.com</Link>
+                <Link href="mailto:contact.journaling@gmail.com">contact.journaling@gmail.com</Link>
                 <div className="text-tiny">We're always looking to improve! Share your feedback and help us make your experience even better.</div>
                 </div>
             </PopoverContent>

@@ -1,14 +1,18 @@
 import { useState } from "react";
 import {useNavigate } from "react-router-dom";
 import React from "react";
+import InteractiveCard from "../components/InteractiveCard";
 import {Link as ScrollLink, animateScroll as scroll } from 'react-scroll';
-import {Button} from "@nextui-org/react";
+import {Button, Card, CardBody, Checkbox} from "@nextui-org/react";
 import {Avatar, AvatarGroup} from "@nextui-org/react";
 import {Link, Navbar, NavbarBrand, NavbarContent, NavbarItem,} from "@nextui-org/react";
 
+import previewJournaling from "../assets/preview-journaling.png"
+import arrow from "../assets/arrow.png"
 import journalingLogo from "../assets/journaling_logo_blue-removebg.png"
 import journalingLogoW from "../assets/journaling_logo_blue_w-removebg.png"
 import doneAll from "../assets/done_all_black-removebg.png"
+import doneAllWhite from "../assets/done_all_white.png"
 import moneyOff from "../assets/money_off.png"
 import star from "../assets/star.png"
 import doneOne from "../assets/done_one.png"
@@ -60,10 +64,9 @@ function LandingPage() {
 
       <section className= "min-h-screen">
         <div className="hero bg-base lg:py-20 lg:px-8 ">
-          <div className="hero-content justify-center flex-col lg:flex-row-reverse">
+          <div className="hero-content justify-center flex-col lg:flex-row-reverse gap-16">
             <img
-              src={doneAll}
-              className="rounded-lg shadow-2xl w-" 
+              src={previewJournaling}
               />
             <div className="text-left itens-start">
               <h1 className="text-5xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter ">
@@ -72,16 +75,16 @@ function LandingPage() {
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600" >Journaling</span>
               </h1>
                 <p className="py-6 text-lg leading-relaxed ">
-                Create and track habits, set goals, and write about the best part of your day. Journaling helps you stay organized, 
+                Journaling helps you stay organized, 
                 motivated, and focused on achieving your personal growth and wellness objectives.
                 </p>
                 <Button color="primary" className="mt-8 h-12 w-60 text-white">
-                  <img src={doneAll} alt="Logo" className="h-5 w-5"/>
+                  <img src={doneAllWhite} alt="Logo" className="h-5 w-5"/>
                   Get Journaling
                 </Button>
                 <div className="mt-4 flex">
                     <img className="w-5" src={moneyOff} alt="" />
-                    <span className="mr-1 text-green-500">80% off </span><span>for the first 100 costumers!</span>
+                    <span className="mr-1 text-green-500">80% off </span><span>for the first <span className="font-bold">100</span> costumers!</span>
                 </div>
 
                 <div className="mt-14 flex">
@@ -180,13 +183,34 @@ function LandingPage() {
 
             <div className="flex flex-col lg:flex-row  mb-20 gap-20">
               <div className="flex-1 w-full">
-                  <p className="py-6 text-lg leading-relaxed mb-8">
+                  <p className="py-6 text-lg leading-relaxed ">
                   Why rely on traditional paper journals when you can have a sleek, web-based solution at your fingertips?
-                  Our app is designed to revolutionize your journaling experience by making it easier, more accessible, and far more efficient.
+                  This app is designed to revolutionize your journaling experience by making it easier, more accessible, and far more efficient.
                   </p>
-                  <div className="mb-8">
-                    <img src={doneAll} alt="" />
-                    <img src={doneAll} alt="" />
+                  <div className="flex mb-8 gap-4 justify-center">
+                    <div className="card bg-base-100 shadow-xl">
+                      <div className="card-body">
+                        <h2 className="card-title line-through">Fisical Diary</h2>
+                        <p className="text-8xl">📔</p>
+                        <div className="card-actions justify-end">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-center items-center">
+                      <img src={arrow} className="w-8 h-6" />
+                    </div>
+                    
+                    <div className="card bg-base-100 shadow-xl">
+                      <div className="card-body">
+                        <h2 className="card-title mb-2">Journaling App</h2>
+                          <InteractiveCard text="Write from anywhere"/>
+                          <InteractiveCard text="With any device"/>
+                        <div className="card-actions justify-end">
+                        </div>
+                      </div>
+                    </div>
+
                   </div>
                   
                   <p className="font-bold">
@@ -196,11 +220,11 @@ function LandingPage() {
 
               <div className="flex-1 w-full mt-8 p-8 bg-blue-100 justify-center border rounded-lg">
                 <div className="tecxt">
-                  <p className="py-3 text-lg leading-relaxed font-bold text-blue-500">- Write from anywhere using any device 📱</p>
+                  <p className="py-3 text-lg leading-relaxed font-bold text-blue-500">- Write the best part of your day ☀️</p>
                   <p className="py-3 text-lg leading-relaxed font-bold text-blue-500">- Set and achieve goals ✅</p>
                   <p className="py-3 text-lg leading-relaxed font-bold text-blue-500">- Build new habits 🌱</p>
                   <p className="py-3 text-lg leading-relaxed font-bold text-blue-500">- Records organized by month 🗓️</p>
-                  <p className="py-3 text-lg leading-relaxed font-bold text-blue-500">- Enjoy a clean and intuitive design 💻</p>
+                  <p className="py-3 text-lg leading-relaxed font-bold text-blue-500">- Clean and intuitive design 💻</p>
                   <p className="py-3 text-lg leading-relaxed font-bold text-blue-500">- Automatically synced across all devices 🗂️</p>
                 </div>
                 
@@ -208,7 +232,7 @@ function LandingPage() {
 
             </div>
             <Button color="primary" className="mt-10 h-12 w-60 text-white">
-                  <img src={doneAll} alt="Logo" className="h-5 w-5"/>
+                  <img src={doneAllWhite} alt="Logo" className="h-5 w-5"/>
                   Get Started
             </Button>
           </div> 
@@ -278,7 +302,7 @@ function LandingPage() {
 
                   <div className="card-actions justify-center">
                     <Button color="primary" className="mt-8 h-12 w-60 text-white">
-                      <img src={doneAll} alt="Logo" className="h-5 w-5" />
+                      <img src={doneAllWhite} alt="Logo" className="h-5 w-5" />
                       Get Journaling
                     </Button>
                   </div>
@@ -320,7 +344,7 @@ function LandingPage() {
 
                   <div className="card-actions justify-center">
                     <Button color="primary" className="mt-8 h-12 w-60 text-white">
-                      <img src={doneAll} alt="Logo" className="h-5 w-5" />
+                      <img src={doneAllWhite} alt="Logo" className="h-5 w-5" />
                       Get Journaling
                     </Button>
                   </div>
@@ -344,7 +368,7 @@ function LandingPage() {
         </aside>
         <nav className="felx justify-center">
           <h6 className="footer-title">Company</h6>
-          <a href="mailto:support@journaling.com" className="link link-hover">Contact: support@journaling.com</a>
+          <a href="mailto:contact.journaling@gmail.com" className="link link-hover">Contact: contact.journaling@gmail.com</a>
         </nav>
         <nav>
           <h6 className="footer-title">Legal</h6>

@@ -5,7 +5,7 @@ import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 import { Input, Button } from "@nextui-org/react";
 import { EyeFilledIcon } from "../assets/EyeFilledIcon";
 import { EyeSlashFilledIcon } from "../assets/EyeSlashFilledIcon";
-import doneAll from "../assets/done_all_black-removebg.png";
+import doneAllWhite from "../assets/done_all_white.png";
 
 function LoginForm({ route, method }) {
   const [username, setUsername] = useState("");
@@ -102,7 +102,7 @@ function LoginForm({ route, method }) {
                 type="submit"
                 isLoading={loading}
               >
-                <img src={doneAll} alt="Logo" className="h-5 w-5" />
+                <img src={doneAllWhite} alt="Logo" className="h-5 w-5" />
                 {title} into Journaling
               </Button>
             </div>

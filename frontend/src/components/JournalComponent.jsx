@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../api";
-import { Tooltip, Checkbox, Card, CardBody} from "@nextui-org/react";
+import { Tooltip, Checkbox, Card, CardBody } from "@nextui-org/react";
 import { EditIcon } from "../assets/EditIcon";
 import { DeleteIcon } from "../assets/DeleteIcon";
 
